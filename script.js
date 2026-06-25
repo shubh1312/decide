@@ -56,6 +56,16 @@ const winnerReason = document.querySelector("#winnerReason");
 const beigeScore = document.querySelector("#beigeScore");
 const tropikaScore = document.querySelector("#tropikaScore");
 const storageKey = "bangaloreBirthdayVenueWeights";
+const voteEndpoint = "";
+const voteForm = document.querySelector("#voteForm");
+const voterName = document.querySelector("#voterName");
+const voteMessage = document.querySelector("#voteMessage");
+const voteSyncStatus = document.querySelector("#voteSyncStatus");
+const beigeVotes = document.querySelector("#beigeVotes");
+const tropikaVotes = document.querySelector("#tropikaVotes");
+const voteList = document.querySelector("#voteList");
+const copyVotes = document.querySelector("#copyVotes");
+const refreshVotesButton = document.querySelector("#refreshVotes");
 
 function getWeights() {
   return Object.fromEntries(
@@ -124,3 +134,185 @@ try {
 } catch {
   updateDecision();
 }
+
+function summarizeVotes(votes) {
+  return votes.reduce(
+    (summary, vote) => {
+      summary[vote.venue] += 1;
+      return summary;
+    },
+    { beige: 0, tropika: 0 }
+  );
+}
+
+function setSyncStatus(message, state = "warning") {
+  voteSyncStatus.textContent = message;
+  voteSyncStatus.classList.toggle("is-connected", state === "connected");
+  voteSyncStatus.classList.toggle("is-warning", state === "warning");
+}
+
+function renderVotes(votes = []) {
+  const summary = summarizeVotes(votes);
+
+  beigeVotes.textContent = summary.beige;
+  tropikaVotes.textContent = summary.tropika;
+  voteList.innerHTML = "";
+
+  if (votes.length === 0) {
+    const empty = document.createElement("li");
+    empty.textContent = "No votes yet";
+    voteList.append(empty);
+    return;
+  }
+
+  votes.forEach((vote) => {
+    const item = document.createElement("li");
+    const name = document.createElement("strong");
+    name.textContent = vote.name;
+    item.append(name, ` chose ${venues[vote.venue].name}`);
+    voteList.append(item);
+  });
+}
+
+function buildVoteSummary(votes) {
+  const summary = summarizeVotes(votes);
+  const winner =
+    summary.tropika === summary.beige
+      ? "Tie"
+      : summary.tropika > summary.beige
+        ? "Tropika"
+        : "Beige";
+  const lines = votes.map((vote) => `- ${vote.name}: ${venues[vote.venue].name}`);
+
+  return [
+    "Team birthday venue vote",
+    `Beige: ${summary.beige}`,
+    `Tropika: ${summary.tropika}`,
+    `Current result: ${winner}`,
+    "",
+    ...lines
+  ].join("\n");
+}
+
+function fetchVotes() {
+  return new Promise((resolve, reject) => {
+    if (!voteEndpoint) {
+      reject(new Error("Missing vote endpoint"));
+      return;
+    }
+
+    const callbackName = `handleVotes${Date.now()}`;
+    const script = document.createElement("script");
+    const separator = voteEndpoint.includes("?") ? "&" : "?";
+
+    window[callbackName] = (payload) => {
+      cleanup();
+      if (!payload?.ok) {
+        reject(new Error("Vote sheet returned an error"));
+        return;
+      }
+      resolve(payload.votes || []);
+    };
+
+    function cleanup() {
+      script.remove();
+      delete window[callbackName];
+    }
+
+    script.onerror = () => {
+      cleanup();
+      reject(new Error("Could not load vote sheet"));
+    };
+
+    script.src = `${voteEndpoint}${separator}callback=${callbackName}`;
+    document.body.append(script);
+  });
+}
+
+async function refreshVotes() {
+  if (!voteEndpoint) {
+    setSyncStatus("Add your Apps Script web app URL in script.js to sync votes to Google Sheets.");
+    renderVotes();
+    return;
+  }
+
+  try {
+    const votes = await fetchVotes();
+    renderVotes(votes);
+    setSyncStatus("Connected to the shared Google Sheet.", "connected");
+  } catch {
+    setSyncStatus("Could not reach the Google Sheet vote endpoint.");
+    renderVotes();
+  }
+}
+
+async function submitVote(name, venue) {
+  const body = new URLSearchParams({ name, venue });
+
+  await fetch(voteEndpoint, {
+    method: "POST",
+    mode: "no-cors",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded"
+    },
+    body
+  });
+}
+
+voteForm.addEventListener("submit", (event) => {
+  event.preventDefault();
+
+  const submitter = event.submitter;
+  const venue = submitter?.value;
+  const name = voterName.value.trim();
+
+  if (!name) {
+    voteMessage.textContent = "Add your name before voting.";
+    voterName.focus();
+    return;
+  }
+
+  if (!voteEndpoint) {
+    voteMessage.textContent = "Vote sheet is not connected yet.";
+    return;
+  }
+
+  voteMessage.textContent = `Saving ${name}'s vote...`;
+
+  submitVote(name, venue)
+    .then(() => {
+      voteMessage.textContent = `${name}'s vote for ${venues[venue].name} is saved.`;
+      voterName.value = "";
+      window.setTimeout(refreshVotes, 900);
+    })
+    .catch(() => {
+      voteMessage.textContent = "Could not save the vote. Try again.";
+    });
+});
+
+copyVotes.addEventListener("click", async () => {
+  let votes = [];
+
+  try {
+    votes = await fetchVotes();
+  } catch {
+    voteMessage.textContent = "Could not copy because the vote sheet is not connected.";
+    return;
+  }
+
+  const summary = buildVoteSummary(votes);
+
+  try {
+    await navigator.clipboard.writeText(summary);
+    voteMessage.textContent = "Vote tally copied.";
+  } catch {
+    voteMessage.textContent = summary;
+  }
+});
+
+refreshVotesButton.addEventListener("click", () => {
+  refreshVotes();
+  voteMessage.textContent = "Refreshing vote tally...";
+});
+
+refreshVotes();

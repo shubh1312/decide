@@ -18,6 +18,7 @@
       <nav class="topbar" aria-label="Page">
         <a href="#decision">Decision</a>
         <a href="#compare">Compare</a>
+        <a href="#weights">Score</a>
         <a href="#vote">Vote</a>
         <a href="#sources">Sources</a>
       </nav>
@@ -29,7 +30,7 @@
           polished rooftop lounge or tropical microbrewery destination.
         </p>
         <div class="hero__actions" aria-label="Primary actions">
-          <a class="button button--primary" href="#vote">Start deciding</a>
+          <a class="button button--primary" href="#vote">Vote now</a>
           <a class="button button--secondary" href="#compare">View comparison</a>
         </div>
       </section>
@@ -95,7 +96,7 @@
         </div>
       </section>
 
-      <section class="section section--split" id="vote">
+      <section class="section section--split" id="weights">
         <div class="section__heading">
           <p class="label">Decision weights</p>
           <h2>Tune what matters for this birthday</h2>
@@ -134,6 +135,53 @@
             <button type="button" data-preset="team">Group outing</button>
             <button type="button" data-preset="dinner">Polished dinner</button>
             <button type="button" data-preset="beer">Beer night</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="section vote-section" id="vote">
+        <div class="section__heading">
+          <p class="label">Team vote</p>
+          <h2>Cast a simple venue vote</h2>
+          <p>
+            Ask each person to enter their name and pick one venue. Votes sync
+            to the shared Google Sheet once the Apps Script endpoint is added.
+          </p>
+        </div>
+
+        <div class="vote-board" aria-label="Team venue vote">
+          <form class="vote-form" id="voteForm">
+            <label class="name-field">
+              <span>Your name</span>
+              <input id="voterName" name="voterName" type="text" maxlength="40" placeholder="Type your name" autocomplete="name">
+            </label>
+            <div class="vote-buttons" role="group" aria-label="Choose a venue">
+              <button type="submit" name="venue" value="beige">Vote Beige</button>
+              <button type="submit" name="venue" value="tropika">Vote Tropika</button>
+            </div>
+            <p class="sync-status" id="voteSyncStatus">Checking vote sheet connection...</p>
+            <p class="vote-message" id="voteMessage" aria-live="polite"></p>
+          </form>
+
+          <div class="vote-results" aria-live="polite">
+            <article>
+              <span>Beige</span>
+              <strong id="beigeVotes">0</strong>
+            </article>
+            <article>
+              <span>Tropika</span>
+              <strong id="tropikaVotes">0</strong>
+            </article>
+          </div>
+
+          <div class="vote-list">
+            <h3>Votes so far</h3>
+            <ul id="voteList"></ul>
+          </div>
+
+          <div class="vote-actions">
+            <button type="button" id="copyVotes">Copy tally</button>
+            <button type="button" id="refreshVotes">Refresh tally</button>
           </div>
         </div>
       </section>
