@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Team Birthday Venue Decision | Beige vs Tropika</title>
+    <meta
+      name="description"
+      content="A decision page for choosing between Beige and Tropika Brewing Co for a Bangalore team lead birthday outing."
+    >
+    <link rel="preload" href="assets/team-dinner-bangalore.png" as="image">
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <header class="hero">
+      <img class="hero__image" src="assets/team-dinner-bangalore.png" alt="Rooftop lounge and tropical brewery setting for a team dinner">
+      <div class="hero__shade"></div>
+      <nav class="topbar" aria-label="Page">
+        <a href="#decision">Decision</a>
+        <a href="#compare">Compare</a>
+        <a href="#vote">Vote</a>
+        <a href="#sources">Sources</a>
+      </nav>
+      <section class="hero__content" id="decision">
+        <p class="eyebrow">Team lead birthday · Bangalore · Outer Ring Road</p>
+        <h1>Beige or Tropika?</h1>
+        <p class="hero__copy">
+          A quick decision board for picking the better team birthday venue:
+          polished rooftop lounge or tropical microbrewery destination.
+        </p>
+        <div class="hero__actions" aria-label="Primary actions">
+          <a class="button button--primary" href="#vote">Start deciding</a>
+          <a class="button button--secondary" href="#compare">View comparison</a>
+        </div>
+      </section>
+    </header>
+
+    <main>
+      <section class="decision-band" aria-label="Current recommendation">
+        <div class="decision-card">
+          <div>
+            <p class="label">Current pick</p>
+            <h2 id="winnerTitle">Tropika for the team outing</h2>
+            <p id="winnerReason">
+              Strongest fit when group energy, beer, and atmosphere matter most.
+            </p>
+          </div>
+          <div class="score-pill" aria-live="polite">
+            <span id="beigeScore">0</span>
+            <span>:</span>
+            <span id="tropikaScore">0</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="compare">
+        <div class="section__heading">
+          <p class="label">At a glance</p>
+          <h2>Same ORR belt, very different nights</h2>
+        </div>
+        <div class="venue-grid">
+          <article class="venue venue--beige">
+            <div class="venue__top">
+              <span class="venue__icon" aria-hidden="true">B</span>
+              <div>
+                <h3>Beige</h3>
+                <p>Rooftop fine-casual lounge, Vanshree Towers, Marathahalli</p>
+              </div>
+            </div>
+            <ul class="facts">
+              <li><strong>Best for</strong><span>Date-like, polished, quieter dinner</span></li>
+              <li><strong>Food</strong><span>Focused Italian, Mexican, Asian and global plates</span></li>
+              <li><strong>Ambience</strong><span>Rooftop setting, live music, evening city air</span></li>
+              <li><strong>Service</strong><span>Usually praised as attentive and helpful</span></li>
+              <li><strong>Cost</strong><span>About Rs. 3,000-3,500 for two</span></li>
+            </ul>
+          </article>
+
+          <article class="venue venue--tropika">
+            <div class="venue__top">
+              <span class="venue__icon" aria-hidden="true">T</span>
+              <div>
+                <h3>Tropika Brewing Co</h3>
+                <p>One-acre tropical microbrewery, Panathur/Marathahalli ORR</p>
+              </div>
+            </div>
+            <ul class="facts">
+              <li><strong>Best for</strong><span>Large team, beer, big venue energy</span></li>
+              <li><strong>Food</strong><span>Huge global menu across Indian, Italian, Chinese, Mexican and Thai</span></li>
+              <li><strong>Ambience</strong><span>Tropical island-themed space with lush lighting</span></li>
+              <li><strong>Drinks</strong><span>In-house craft beers including Coconut Cream Ale and stout</span></li>
+              <li><strong>Practical</strong><span>Book ahead; venue gets busy</span></li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <section class="section section--split" id="vote">
+        <div class="section__heading">
+          <p class="label">Decision weights</p>
+          <h2>Tune what matters for this birthday</h2>
+          <p>
+            Move the sliders as a team. The score updates instantly and stays in
+            this browser for the next person who opens it on the same device.
+          </p>
+        </div>
+
+        <div class="controls" aria-label="Venue decision controls">
+          <label class="control">
+            <span>Team size and mixed preferences</span>
+            <input data-weight="team" type="range" min="0" max="10" value="8">
+          </label>
+          <label class="control">
+            <span>Craft beer importance</span>
+            <input data-weight="beer" type="range" min="0" max="10" value="7">
+          </label>
+          <label class="control">
+            <span>Quiet, polished dinner</span>
+            <input data-weight="quiet" type="range" min="0" max="10" value="4">
+          </label>
+          <label class="control">
+            <span>Food consistency</span>
+            <input data-weight="food" type="range" min="0" max="10" value="6">
+          </label>
+          <label class="control">
+            <span>Wow-factor ambience</span>
+            <input data-weight="ambience" type="range" min="0" max="10" value="9">
+          </label>
+          <label class="control">
+            <span>Easy service flow</span>
+            <input data-weight="service" type="range" min="0" max="10" value="5">
+          </label>
+          <div class="preset-row" aria-label="Quick presets">
+            <button type="button" data-preset="team">Group outing</button>
+            <button type="button" data-preset="dinner">Polished dinner</button>
+            <button type="button" data-preset="beer">Beer night</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section__heading">
+          <p class="label">How to choose</p>
+          <h2>Fast call</h2>
+        </div>
+        <div class="callouts">
+          <article>
+            <h3>Pick Tropika when</h3>
+            <p>
+              The birthday plan is more group outing than quiet dinner. It wins
+              on craft beer, scale, variety, and memorable atmosphere.
+            </p>
+          </article>
+          <article>
+            <h3>Pick Beige when</h3>
+            <p>
+              The team wants a calmer rooftop evening with live music, attentive
+              service, and a tighter food experience.
+            </p>
+          </article>
+          <article>
+            <h3>Most likely answer</h3>
+            <p>
+              For a team lead birthday with a mixed team, Tropika is the safer
+              default. Book Beige if the guest of honor prefers quieter places.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section" id="sources">
+        <div class="section__heading">
+          <p class="label">Reference links</p>
+          <h2>Check live details before booking</h2>
+        </div>
+        <div class="links">
+          <a href="https://www.zomato.com/bangalore/beige-2-marathahalli-bangalore">Beige on Zomato</a>
+          <a href="https://www.eazydiner.com/bengaluru/beige-marathahalli-east-bengaluru-711240">Beige on EazyDiner</a>
+          <a href="https://www.swiggy.com/restaurants/beige-marathahalli-bangalore-1321868/dineout">Beige on Swiggy Dineout</a>
+          <a href="https://tropikabrewing.com/">Tropika official site</a>
+          <a href="https://www.tripadvisor.in/Restaurant_Review-g297628-d34187653-Reviews-Tropika_Brewing_Co-Bengaluru_Bangalore_District_Karnataka.html">Tropika on Tripadvisor</a>
+          <a href="https://www.zomato.com/bangalore/tropika-brewing-co-marathahalli-bangalore">Tropika on Zomato</a>
+        </div>
+        <p class="note">
+          Ratings, prices, menu items, and timings can change. Reconfirm current
+          availability and reserve before the birthday plan is announced.
+        </p>
+      </section>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>
